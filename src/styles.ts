@@ -1,4 +1,4 @@
-export const imageDisplaySize = {width:400, height:400 };
+export const imageDisplaySize = { width:400, height:400 };
 export const styles = {
     inputFile: {
 		display: 'none'
