@@ -1,14 +1,14 @@
-import { FC, useState } from "react";
+import { FC, useState, useEffect } from "react";
 import { useHooks } from "./hooks";
 import Button from '@mui/material/Button';
 import { styles } from "./styles";
 import './App.css';
-
+import axios from "axios";
 
 export const FileInput: FC = () => {
   const { handleFiles, imageContainerRef, base64, inputFileRef, openDialog } = useHooks();
   const [ visible, setVisible ] = useState(true);
-  //const { visible, setVisible } = useState(true);
+  const [ resp, setResp ] = useState([]);
 
   // POST メソッドの実装の例
   async function postData(url = '', data = {}) {
@@ -30,18 +30,28 @@ export const FileInput: FC = () => {
   }
 
 
-  const upload = () => {
+  const upload = async() => {
     console.log(base64.length)
     if (base64.length == 0) return
 
-    //postData('http://153.127.29.180/api/upload/', { photo: base64 })
-    postData('http://127.0.0.1:8000/posttest', { ping: "hi" })
-    //postData('http://127.0.0.1:8000/upload', { photo: base64 })
-    .then(response => response.json())
-    .then(data => {
-      console.log(data); // `data.json()` の呼び出しで解釈された JSON データ
-    });
+    try{
+      
+      const response = await axios.post('http://127.0.0.1:8000/uploadmeter', {photo:base64}, {headers: {'content-type': 'application/json'}});
+      setResp(response.data.pong);
 
+      console.log(resp);
+
+    }catch{
+      window.alert('通信失敗');
+    }
+
+    //postData('http://153.127.29.180/api/upload/', { photo: base64 })
+    //postData('http://127.0.0.1:8000/posttest', { ping: "hi" })
+    //postData('http://127.0.0.1:8000/upload', { photo: base64 })
+    //.then(response => response.json())
+    //.then(data => {
+      //console.log(data); // `data.json()` の呼び出しで解釈された JSON データ
+    //});
   }
 
   return (
@@ -63,6 +73,7 @@ export const FileInput: FC = () => {
         <Button color = "secondary" variant = "contained" onClick =  {upload}>OCR実行</Button>
       </div>
       {/* <div ref={inputFileRef} /> */}
+      <div>レスポンス : {resp}</div>
     </div>
   );
 };
