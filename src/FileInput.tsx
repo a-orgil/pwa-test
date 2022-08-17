@@ -1,4 +1,4 @@
-import { FC, useState, useEffect } from "react";
+import { FC, useState } from "react";
 import { useHooks } from "./hooks";
 import Button from '@mui/material/Button';
 import { styles } from "./styles";
@@ -6,29 +6,22 @@ import './App.css';
 import axios from "axios";
 
 export const FileInput: FC = () => {
-  const { handleFiles, imageContainerRef, base64, inputFileRef, openDialog } = useHooks();
-  const [ visible, setVisible ] = useState(true);
-  const [ resp, setResp ] = useState([]);
+  const { handleFiles, imageContainerRef, base64, inputFileRef, openDialog, resetSelection } = useHooks();
+  const [ stage, setStage ] = useState(1);
+  const [ resp, setResp ] = useState<string[]>([]);
 
-  // POST メソッドの実装の例
-  async function postData(url = '', data = {}) {
-    // 既定のオプションには * が付いています
-    const response = await fetch(url, {
-      method: 'POST', // *GET, POST, PUT, DELETE, etc.
-      mode: 'no-cors', // no-cors, *cors, same-origin
-      cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-      credentials: 'same-origin', // include, *same-origin, omit
-      headers: {
-        'Content-Type': 'application/json'
-        // 'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      redirect: 'follow', // manual, *follow, error
-      referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-      body: JSON.stringify(data) // 本文のデータ型は "Content-Type" ヘッダーと一致させる必要があります
-    })
-    return response; // JSON のレスポンスをネイティブの JavaScript オブジェクトに解釈
+  if(base64.length == 0 && stage != 1){
+    setResp([]);
+    setStage(1);
   }
 
+  if(base64.length != 0 && stage == 1){
+    setStage(2);
+  }
+
+  if(stage == 2 && resp.length != 0){
+    setStage(3);
+  }
 
   const upload = async() => {
     console.log(base64.length)
@@ -37,27 +30,48 @@ export const FileInput: FC = () => {
     try{
       
       const response = await axios.post('http://127.0.0.1:8000/uploadmeter', {photo:base64}, {headers: {'content-type': 'application/json'}});
-      setResp(response.data.pong);
-
-      console.log(resp);
+      let resp_tmp = [ response.data.product_num, response.data.file_path ]
+      setResp(resp_tmp);
 
     }catch{
-      window.alert('通信失敗');
+      window.alert('APIの呼び出しに失敗しました');
     }
 
-    //postData('http://153.127.29.180/api/upload/', { photo: base64 })
-    //postData('http://127.0.0.1:8000/posttest', { ping: "hi" })
-    //postData('http://127.0.0.1:8000/upload', { photo: base64 })
-    //.then(response => response.json())
-    //.then(data => {
-      //console.log(data); // `data.json()` の呼び出しで解釈された JSON データ
-    //});
+  }
+
+  function complete() {
+    window.alert('登録完了');
+    resetSelection();
+    setStage(1);
+    setResp([]);
+  }
+
+  const ShowResult:FC = () => {
+    if(stage != 3) return (
+      <></>
+    )
+
+    return (
+      <>
+      <div><label>　　型番：<input type="text" defaultValue={resp[0]} id="name" name="name" /></label></div>
+      <div><label>メーカー：<input type="text" defaultValue={resp[1]} id="hey" name="hey" /></label></div>
+      <div><Button color = "secondary" variant="contained" onClick =  {complete}>データを登録</Button></div>
+      </>
+    )
+  }
+
+  const ApiCall:FC = () => {
+    if( stage != 2 ) return (
+      <></>
+    )
+
+    return (
+      <Button color = "secondary" variant = "contained" onClick =  {upload}>読取実行</Button>
+    )
   }
 
   return (
     <div>
-      {/* <>{setVisible(!visible)}</> */}
-      {/* <input type="file" accept="image/*" onChange={handleFiles} /> */}
       <input
         type = "file"
         ref = {inputFileRef}
@@ -65,15 +79,14 @@ export const FileInput: FC = () => {
         onChange = {handleFiles}
         style = {{...styles.inputFile}}
       />
-      {/* <Button variant = "contained" onClick =  {openDialog}>画像を選択</Button> */}
-      {/* <Button variant = "contained">画像を選択</Button> */}
+
       <div ref={imageContainerRef} />
+
       <Button variant = "contained" onClick =  {openDialog}>画像を選択</Button>
-      <div style ={{ visibility: visible ? "visible" : "hidden"}}>
-        <Button color = "secondary" variant = "contained" onClick =  {upload}>OCR実行</Button>
-      </div>
-      {/* <div ref={inputFileRef} /> */}
-      <div>レスポンス : {resp}</div>
+      
+      <div><ApiCall /></div>
+    
+      <div><ShowResult /></div>
     </div>
   );
 };

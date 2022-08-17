@@ -71,7 +71,7 @@ export const useHooks = () => {
     inputFile.click();
   }
 
-  return { handleFiles, imageContainerRef, base64, inputFileRef, openDialog };
+  return { handleFiles, imageContainerRef, base64, inputFileRef, openDialog, resetSelection };
   //return { handleFiles, imageContainerRef };,
 
 };
