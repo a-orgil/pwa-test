@@ -1,8 +1,10 @@
 import { type } from "os";
 import { ChangeEventHandler, MouseEventHandler, useRef, useState } from "react";
 import { imageDisplaySize } from './styles';
+import Resizer from "react-image-file-resizer"
 
 const fileImage = new Image();
+
 export const useHooks = () => {
   const [base64, setBase64] = useState("");
   const inputFileRef = useRef<HTMLInputElement>(null);
@@ -42,19 +44,40 @@ export const useHooks = () => {
     const files = event.currentTarget.files;
     resetSelection();
     if (!files || files?.length === 0) return;
-    const file = files[0];
+    let file = files[0];
     if (!file.type.includes("image/")) {
       event.currentTarget.value = "";
       return;
     }
-    var reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = function () {
-		  var base64String = reader.result;
-      if(typeof(base64String) != 'string') return;
-      base64String = base64String.replace(/data:.*\/*;base64,/, '');
-      setBase64(base64String);
-    }
+    //const img = resizeFile(file);
+    //reader.readAsDataURL(img);
+    //この辺から修正10/13
+
+    Resizer.imageFileResizer(
+      file,
+      1280,
+      1280,
+      "JPEG",
+      100,
+      0,
+      (uri) => {
+        var base64String = uri;
+        if(typeof(base64String) != 'string') return;
+        base64String = base64String.replace(/data:.*\/*;base64,/, '');
+        setBase64(base64String);
+        console.log(base64)
+      },
+      "base64"
+    );
+
+    // var reader = new FileReader();
+    // reader.onload = function () {
+		//   var base64String = reader.result;
+    //   if(typeof(base64String) != 'string') return;
+    //   base64String = base64String.replace(/data:.*\/*;base64,/, '');
+    //   setBase64(base64String);
+    // }
+    // reader.readAsDataURL(file);
 
     const imageContainer = imageContainerRef.current;
     if (!imageContainer) return;
