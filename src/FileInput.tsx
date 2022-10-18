@@ -28,7 +28,8 @@ export const FileInput: FC = () => {
     if (base64.length == 0) return
 
     try{
-      const response = await axios.post('http://153.127.29.180/uploadmeter', {photo:base64}, {headers: {'content-type': 'application/json'}});
+      //const response = await axios.post('http://153.127.29.180/uploadmeter', {photo:base64}, {headers: {'content-type': 'application/json'}});
+      const response = await axios.post('https://gamcis.jp/Django/labeltest/uploadmeter', {photo:base64}, {headers: {'content-type': 'application/json'}});
       //const response = await axios.post('http://127.0.0.1:8000/uploadmeter', {photo:base64}, {headers: {'content-type': 'application/json'}});
       let resp_tmp = [ response.data.manufact, response.data.model_num, response.data.K_num, response.data.exp_date, response.data.size, 
         response.data.serial_num, response.data.company_num ]
