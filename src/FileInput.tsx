@@ -41,7 +41,7 @@ export const FileInput: FC = () => {
 
   }
 
-  function complete() {
+    function complete() {
     window.alert('登録完了');
     resetSelection();
     setStage(1);
@@ -62,7 +62,7 @@ export const FileInput: FC = () => {
       <div><label>　　号数：<input type="text" defaultValue={resp[4]} id="size" name="size" /></label></div>
       <div><label>製造番号：<input type="text" defaultValue={resp[5]} id="serial_num" name="serial_num" /></label></div>
       <div><label>　　社番：<input type="text" defaultValue={resp[6]} id="company_num" name="company_num" /></label></div>
-      <div><Button color = "secondary" variant="contained" onClick =  {complete}>データを登録</Button></div>
+      <div><Button sx = {{margin: 0.3}} color = "secondary" variant="contained" onClick =  {complete}>データを登録</Button></div>
       </>
     )
   }
@@ -73,7 +73,9 @@ export const FileInput: FC = () => {
     )
 
     return (
-      <Button color = "secondary" variant = "contained" onClick =  {upload}>読取実行</Button>
+      <>
+        <Button sx = {{margin: 0.3}} color = "secondary" variant = "contained" onClick =  {upload}>読取実行</Button>
+      </>
     )
   }
 
@@ -89,7 +91,7 @@ export const FileInput: FC = () => {
 
       <div ref={imageContainerRef} />
 
-      <Button variant = "contained" onClick =  {openDialog}>画像を選択</Button>
+      <Button sx = {{margin: 0.3}} variant = "contained" onClick =  {openDialog}>画像を選択</Button>
       
       <div><ApiCall /></div>
     

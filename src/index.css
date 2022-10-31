@@ -15,3 +15,9 @@ code {
 .customButton {
   margin-bottom: 10 px;
 }
+
+.footer {
+  padding-top: 10 px;
+  margin-top: 10 px;
+  text-align:center;
+}
