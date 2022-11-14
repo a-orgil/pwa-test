@@ -32,7 +32,7 @@ export const FileInput: FC = () => {
       const response = await axios.post('https://gamcis.jp/Django/labeltest/uploadmeter', {photo:base64}, {headers: {'content-type': 'application/json'}});
       //const response = await axios.post('http://127.0.0.1:8000/uploadmeter', {photo:base64}, {headers: {'content-type': 'application/json'}});
       let resp_tmp = [ response.data.manufact, response.data.model_num, response.data.K_num, response.data.exp_date, response.data.size, 
-        response.data.serial_num, response.data.company_num ]
+        response.data.serial_num, response.data.company_num, response.data.meter]
       setResp(resp_tmp);
 
     }catch{
@@ -62,6 +62,7 @@ export const FileInput: FC = () => {
       <div><label>　　号数：<input type="text" defaultValue={resp[4]} id="size" name="size" /></label></div>
       <div><label>製造番号：<input type="text" defaultValue={resp[5]} id="serial_num" name="serial_num" /></label></div>
       <div><label>　　社番：<input type="text" defaultValue={resp[6]} id="company_num" name="company_num" /></label></div>
+      <div><label>　　指針：<input type="text" defaultValue={resp[7]} id="meter" name="meter" /></label></div>
       <div><Button sx = {{margin: 0.3}} color = "secondary" variant="contained" onClick =  {complete}>データを登録</Button></div>
       </>
     )
