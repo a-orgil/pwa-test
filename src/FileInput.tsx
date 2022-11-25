@@ -32,7 +32,7 @@ export const FileInput: FC = () => {
       const response = await axios.post('https://gamcis.jp/Django/labeltest/uploadmeter', {photo:base64}, {headers: {'content-type': 'application/json'}});
       //const response = await axios.post('http://127.0.0.1:8000/uploadmeter', {photo:base64}, {headers: {'content-type': 'application/json'}});
       let resp_tmp = [ response.data.manufact, response.data.model_num, response.data.K_num, response.data.exp_date, response.data.size, 
-        response.data.serial_num, response.data.company_num, response.data.meter]
+        response.data.serial_num, response.data.management_num, response.data.meter]
       setResp(resp_tmp);
 
     }catch{
@@ -55,14 +55,14 @@ export const FileInput: FC = () => {
 
     return (
       <>
-      <div><label>メーカー：<input type="text" defaultValue={resp[0]} id="manufact" name="manufact" /></label></div>
+      <div><label>　　指針：<input type="text" defaultValue={resp[7]} id="meter" name="meter" /></label></div>
+      <div><label>管理番号：<input type="text" defaultValue={resp[6]} id="management_num" name="management_num" /></label></div>
       <div><label>　　型番：<input type="text" defaultValue={resp[1]} id="model_num" name="model_num" /></label></div>
-      <div><label>型承番号：<input type="text" defaultValue={resp[2]} id="K_num" name="K_num" /></label></div>
       <div><label>検満年月：<input type="text" defaultValue={resp[3]} id="exp_date" name="exp_date" /></label></div>
+      <div><label>メーカー：<input type="text" defaultValue={resp[0]} id="manufact" name="manufact" /></label></div>
+      <div><label>型承番号：<input type="text" defaultValue={resp[2]} id="K_num" name="K_num" /></label></div>
       <div><label>　　号数：<input type="text" defaultValue={resp[4]} id="size" name="size" /></label></div>
       <div><label>製造番号：<input type="text" defaultValue={resp[5]} id="serial_num" name="serial_num" /></label></div>
-      <div><label>　　社番：<input type="text" defaultValue={resp[6]} id="company_num" name="company_num" /></label></div>
-      <div><label>　　指針：<input type="text" defaultValue={resp[7]} id="meter" name="meter" /></label></div>
       <div><Button sx = {{margin: 0.3}} color = "secondary" variant="contained" onClick =  {complete}>データを登録</Button></div>
       </>
     )
