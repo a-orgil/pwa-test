@@ -59,7 +59,7 @@ export const FileInput: FC = () => {
       <div><label>管理番号：<input type="text" defaultValue={resp[6]} id="management_num" name="management_num" /></label></div>
       <div><label>　　型番：<input type="text" defaultValue={resp[1]} id="model_num" name="model_num" /></label></div>
       <div><label>検満年月：<input type="text" defaultValue={resp[3]} id="exp_date" name="exp_date" /></label></div>
-      <div><label>メーカー：<input type="text" defaultValue={resp[0]} id="manufact" name="manufact" /></label></div>
+      {/* <div><label>メーカー：<input type="text" defaultValue={resp[0]} id="manufact" name="manufact" /></label></div> */}
       <div><label>型承番号：<input type="text" defaultValue={resp[2]} id="K_num" name="K_num" /></label></div>
       <div><label>　　号数：<input type="text" defaultValue={resp[4]} id="size" name="size" /></label></div>
       <div><label>製造番号：<input type="text" defaultValue={resp[5]} id="serial_num" name="serial_num" /></label></div>
