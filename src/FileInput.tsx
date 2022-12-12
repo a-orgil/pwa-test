@@ -9,6 +9,7 @@ export const FileInput: FC = () => {
   const { handleFiles, imageContainerRef, base64, inputFileRef, openDialog, resetSelection } = useHooks();
   const [ stage, setStage ] = useState(1);
   const [ resp, setResp ] = useState<string[]>([]);
+  const [ total_time, setTotalTime] = useState(0);
 
   if(base64.length == 0 && stage != 1){
     setResp([]);
@@ -24,6 +25,8 @@ export const FileInput: FC = () => {
   }
 
   const upload = async() => {
+    setTotalTime(0)
+    const startTime = performance.now();
     console.log(base64.length)
     if (base64.length == 0) return
 
@@ -32,13 +35,15 @@ export const FileInput: FC = () => {
       const response = await axios.post('https://gamcis.jp/Django/labeltest/uploadmeter', {photo:base64}, {headers: {'content-type': 'application/json'}});
       //const response = await axios.post('http://127.0.0.1:8000/uploadmeter', {photo:base64}, {headers: {'content-type': 'application/json'}});
       let resp_tmp = [ response.data.manufact, response.data.model_num, response.data.K_num, response.data.exp_date, response.data.size, 
-        response.data.serial_num, response.data.management_num, response.data.meter]
+        response.data.serial_num, response.data.management_num, response.data.meter, response.data.exec_time]
       setResp(resp_tmp);
 
     }catch{
       window.alert('APIの呼び出しに失敗しました');
     }
-
+    
+    const endTime = performance.now();
+    setTotalTime(parseFloat(((endTime-startTime)/1000).toFixed(3)));
   }
 
     function complete() {
@@ -55,6 +60,8 @@ export const FileInput: FC = () => {
 
     return (
       <>
+      <div>合計処理時間：{total_time}秒</div>
+      <div>メーターAPI時間：{resp[8]}秒</div>
       <div><label>　　指針：<input type="text" defaultValue={resp[7]} id="meter" name="meter" /></label></div>
       <div><label>管理番号：<input type="text" defaultValue={resp[6]} id="management_num" name="management_num" /></label></div>
       <div><label>　　型番：<input type="text" defaultValue={resp[1]} id="model_num" name="model_num" /></label></div>
